@@ -8,3 +8,6 @@ go get github.com/boltdb/bolt/...
 go get github.com/evnix/boltdbweb
 cd $GOPATH/src/github.com/evnix/boltdbweb
 go build boltdbweb.go
+
+# To browse what is stored in the db..
+boltdbweb --db-name=myevents.db --static-path=/home/$USER/go/bin/
