@@ -1,7 +1,7 @@
 package main
 
 import (
-	zmq "github.com/pebbe/zmq2"
+	zmq "github.com/pebbe/zmq4"
 
 	//	"encoding/binary"
 	"encoding/json"
@@ -84,10 +84,19 @@ type EventSource struct {
 func main() {
 	initDb()
 	fmt.Println("starting eventstore....")
-	responder, _ := zmq.NewSocket(zmq.REP)
-	defer responder.Close()
-	responder.Bind("tcp://*:5555")
+	responder, err := zmq.NewSocket(zmq.REP)
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	defer responder.Close()
+	err = responder.Bind("tcp://*:5555")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Bind *:5555 succesfull")
 	// Wait for messages
 	for {
 		msg, _ := responder.Recv(0)
@@ -98,7 +107,7 @@ func main() {
 		time.Sleep(time.Second)
 
 		// send reply back to client
-		reply := "World"
+		reply := "received"
 		responder.Send(reply, 0)
 	}
 }
