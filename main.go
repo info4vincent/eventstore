@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/info4vincent/eventstore/commands"
+	
 	"github.com/boltdb/bolt"
 )
 
@@ -95,15 +97,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Bind *:5555 succesfull")
+	cardHandler := commands.NewCardScannedCommand()
+ 
+	fmt.Println("Bind *:5555 succesful")
 	// Wait for messages
 	for {
 		msg, _ := responder.Recv(0)
-		println("Received ", string(msg))
+		println("Received :", string(msg))
 		storeInDb(msg)
 
-		// do some fake "work"
-		time.Sleep(time.Second)
+		cardHandler.HandleCommand(msg)
 
 		// send reply back to client
 		reply := "received"

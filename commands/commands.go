@@ -1,8 +1,7 @@
 package commands
 
-import "fmt"
-
 type Commands interface {
-	Name() string
+	Type() string // Returns a string description of the CommandHandler
 	HandleCommand(event string)
 }
+
