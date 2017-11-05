@@ -11,7 +11,7 @@ func main() {
 	fmt.Println("Connecting to eventsource server...")
 	requester, _ := zmq.NewSocket(zmq.REQ)
 	defer requester.Close()
-	requester.Connect("tcp://192.168.2.11:5555")
+	requester.Connect("tcp://localhost:5555")
 
 	// send hello
 	msg := fmt.Sprintf("CardScanned:%s", "000001")
