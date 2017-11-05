@@ -3,7 +3,6 @@ package main
 import (
 	zmq "github.com/pebbe/zmq4"
 
-	//	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"log"
