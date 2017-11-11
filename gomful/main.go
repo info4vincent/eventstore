@@ -83,7 +83,7 @@ func publishCardScanned(uid string) {
 	requester.Connect("tcp://localhost:5555")
 
 	// send hello
-	msg := fmt.Sprintf("card-scanned:%s", uid)
+	msg := fmt.Sprintf("CardScanned:%s", uid)
 	fmt.Println("Sending card scanned msg -> ", msg)
 	requester.Send(msg, 0)
 
