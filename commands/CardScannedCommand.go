@@ -91,7 +91,6 @@ func NewCardScannedCommand() *CardScannedCommand {
 func (n *CardScannedCommand) HandleCommand(event string) string {
 
 	if !strings.HasPrefix(event, "CardScanned:") {
-		log.Println("Event does not containing 'CardScanned:'")
 		return ""
 	}
 

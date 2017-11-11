@@ -110,11 +110,16 @@ func main() {
 	// Wait for messages
 	for {
 		msg, _ := responder.Recv(0)
+		if msg == "" {
+			continue
+		}
 		println("Received :", string(msg))
 		storeInDb(msg)
 
 		actionToSend := cardHandler.HandleCommand(msg)
-
+		if actionToSend == "" {
+			continue
+		}
 		reply := "eventsource received and broadcasting action."
 		responder.Send(reply, 0)
 		publisher.Send(actionToSend, 0)
