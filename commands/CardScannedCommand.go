@@ -69,10 +69,17 @@ func GetMessageOfUserForEvent(session *mgo.Session, uid string) CardUID {
 	err := c.Find(nil).All(&results)
 	err = c.Find(bson.M{"uid": uid}).All(&results)
 
+	log.Println("aantal results:", len(results))
 	if err == nil {
-		return results[0]
+		if len(results) > 0 {
+			return results[0]
+		} else {
+			log.Println("Could not find card")
+			return CardUID{uid, uid, uid, uid}
+		}
 	} else if err != nil {
-		log.Fatal(err)
+		log.Println("Could not find card")
+		return CardUID{uid, uid, uid, uid}
 	}
 
 	return results[0]
