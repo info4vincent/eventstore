@@ -88,7 +88,13 @@ func NewCardScannedCommand() *CardScannedCommand {
 	}
 }
 
-func (n *CardScannedCommand) HandleCommand(event string) {
+func (n *CardScannedCommand) HandleCommand(event string) string {
+
+	if !strings.HasPrefix(event, "CardScanned:") {
+		log.Println("Event does not containing 'CardScanned:'")
+		return ""
+	}
+
 	fmt.Println("CardScanned command executed with card:", event)
 
 	session = connectDB()
@@ -97,6 +103,7 @@ func (n *CardScannedCommand) HandleCommand(event string) {
 	dayPlan := GetMessageOfUserForEvent(session, strings.TrimPrefix(event, "CardScanned:"))
 
 	fmt.Println(dayPlan.Actionuri)
+	return dayPlan.Actionuri
 }
 
 func (n *CardScannedCommand) Type() string {
