@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/info4vincent/eventstore/commands"
-	
+
 	"github.com/boltdb/bolt"
 )
 
@@ -98,18 +98,25 @@ func main() {
 	}
 
 	cardHandler := commands.NewCardScannedCommand()
- 
+
 	fmt.Println("Bind *:5555 succesful")
+
+	//  Prepare our publisher
+	publisher, _ := zmq.NewSocket(zmq.PUB)
+	defer publisher.Close()
+	publisher.Bind("tcp://*:5556")
+	publisher.Bind("ipc://weather.ipc")
+
 	// Wait for messages
 	for {
 		msg, _ := responder.Recv(0)
 		println("Received :", string(msg))
 		storeInDb(msg)
 
-		cardHandler.HandleCommand(msg)
+		actionToSend := cardHandler.HandleCommand(msg)
 
-		// send reply back to client
-		reply := "received"
+		reply := "eventsource received and broadcasting action."
 		responder.Send(reply, 0)
+		publisher.Send(actionToSend, 0)
 	}
 }
