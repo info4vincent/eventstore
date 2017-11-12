@@ -2,3 +2,5 @@ myevents.db
 debug
 gomful/main
 .gitignore.swp
+gomful/gomful
+eventstore
