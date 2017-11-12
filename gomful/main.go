@@ -154,5 +154,6 @@ func main() {
 				fmt.Println(slice2Str(buffer))
 			}
 		}
+		publishCardScanned(slice2StrHex(dev.Params.UID))
 	}
 }
