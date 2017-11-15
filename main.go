@@ -98,6 +98,7 @@ func main() {
 	}
 
 	cardHandler := commands.NewCardScannedCommand()
+	msgHandler := commands.NewMessageofthedayCommand()
 
 	fmt.Println("Bind *:5555 succesful")
 
@@ -109,17 +110,26 @@ func main() {
 
 	// Wait for messages
 	for {
+		pubRec, _ := publisher.Recv(0)
 		msg, _ := responder.Recv(0)
-		if msg == "" {
+		if msg == "" && pubRec == "" {
 			continue
 		}
 		println("Received :", string(msg))
 		storeInDb(msg)
 
+		println("Received publish:", string(pubRec))
+
 		actionToSend := cardHandler.HandleCommand(msg)
+
 		if actionToSend == "" {
+			actionToSend = msgHandler.HandleCommand(msg)
+		}
+		if actionToSend == "" {
+			responder.Send("No known action to take, continuing", 0)
 			continue
 		}
+
 		reply := "eventsource received and broadcasting action."
 		responder.Send(reply, 0)
 		publisher.Send(actionToSend, 0)
