@@ -76,7 +76,7 @@ func insertNth(s string, n int) string {
 	return buffer.String()
 }
 
-func GetMessageOfUserForEvent(session *mgo.Session, uid string) CardUID {
+func GetCommandForCard(session *mgo.Session, uid string) CardUID {
 	c := session.DB(DBName).C(CollectionName)
 
 	var results []CardUID
@@ -123,7 +123,7 @@ func (n *CardScannedCommand) HandleCommand(event string) string {
 	session = connectDB()
 	defer session.Close()
 
-	dayPlan := GetMessageOfUserForEvent(session, strings.TrimPrefix(event, "CardScanned:"))
+	dayPlan := GetCommandForCard(session, strings.TrimPrefix(event, "CardScanned:"))
 
 	fmt.Println(dayPlan.Actionuri)
 	return dayPlan.Actionuri
