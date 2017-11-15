@@ -4,3 +4,4 @@ gomful/main
 .gitignore.swp
 gomful/gomful
 eventstore
+**/vendor/**
